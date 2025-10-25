@@ -1,0 +1,13 @@
+.chatbot-toggle-btn {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9999;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  background-color: #1890ff; // Ant Design xanh
+  border: none;
+
+  &:hover {
+    background-color: #40a9ff;
+  }
+}
