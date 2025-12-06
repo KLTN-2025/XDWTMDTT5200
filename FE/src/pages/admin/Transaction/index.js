@@ -141,7 +141,7 @@ function Transaction() {
 
           {/* Sort số tiền */}
           <Col span={4}>
-            <Form.Item label="Số tiền" name="sortAmount" initialValue="default">
+            <Form.Item label="Sắp xếp theo số tiền" name="sortAmount" initialValue="default">
               <Select
                 onChange={handleSortChange("amount")}
                 options={[

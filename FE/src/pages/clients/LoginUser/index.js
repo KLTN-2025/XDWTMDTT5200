@@ -40,6 +40,7 @@ export default function LoginUser() {
   const [params] = useSearchParams();
 
   const tokenFromURL = params.get("token");
+  const error = params.get("error");
   const tokenFromCookie = getCookie("tokenUser");
 
   // ✅ Tách logic đồng bộ token Google ra hàm riêng (useCallback tránh re-create)
@@ -57,6 +58,8 @@ export default function LoginUser() {
 
         // Đồng bộ giỏ hàng
         const cartItems = getCart();
+        console.log(cartItems);
+        
         const responseMergeCart = await mergeCartPatch(
           { cartItems },
           token
@@ -74,7 +77,7 @@ export default function LoginUser() {
         setCookie("fullName", user.fullName || "", 24);
         setCookie("userId", user._id, 24);
 
-        message.success("Đăng nhập Google thành công!");
+        message.success("Đăng nhập thành công!");
         dispatch(checkLoginUser(true));
         navigate("/");
       } else {
@@ -93,8 +96,11 @@ export default function LoginUser() {
     }
   }, [dispatch, navigate]);
 
-  // ✅ useEffect chỉ chạy 1 lần duy nhất (giảm render thừa)
+  // ✅ useEffect chỉ chạy 1 lần duy nhất (giảm render thừa)`
   useEffect(() => {
+    if (error) {
+      message.error(error);
+    }
     if (tokenFromURL && !tokenFromCookie) {
       handleOtherLogin(tokenFromURL);
     } else if (tokenFromCookie) {

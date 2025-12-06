@@ -1,10 +1,7 @@
-import { Button, Col, Divider, Layout, Row, Space, Typography } from "antd";
-import { Input } from "antd"
+import { Button, Divider, Form, Input, message, Space, Typography } from "antd";
 import { FacebookOutlined, TikTokOutlined, InstagramOutlined } from "@ant-design/icons"
-import { Link } from "react-router-dom";
-const { Footer } = Layout;
-const { Title, Text } = Typography
-
+import { postSendContact } from "../../services/client/contactServies";
+const { Text } = Typography
 
 const benefits = [
   {
@@ -80,6 +77,22 @@ const benefits = [
 ];
 
 function FooterClient({ setting }) {
+  const [form] = Form.useForm();
+
+  const handleSubmit = async (values) => {
+    values.title = "Đăng ký nhận tin";
+    values.fullName = "Đăng ký nhận tin";
+    values.phone = "0123456789";
+    values.description = "Đăng ký nhận tin";
+    
+    const response = await postSendContact(values);
+    if (response.code === 200) {
+      message.success("Đăngy ký nhận tin thành công!");
+      form.resetFields();
+    } else {
+      message.error(response.message)
+    }
+  };
 
   return (
     <>
@@ -92,7 +105,7 @@ function FooterClient({ setting }) {
               <div className="flex flex-wrap items-center gap-8">
                 {/* Benefits */}
                 {benefits.map((benefit, index) => (
-                  <div className="flex flex-col items-center gap-2 text-center">
+                  <div key={index} className="flex flex-col items-center gap-2 text-center">
                     <div className="text-gray-600 mb-2">{benefit.icon}</div>
                     <div>
                       <p className="text-sm font-semibold text-green-700">
@@ -117,7 +130,7 @@ function FooterClient({ setting }) {
                 <div className="flex items-center gap-2">
                   <div>
                     <p className="text-xs text-gray-600">TÌM CHI NHÁNH</p>
-                    <p className="text-lg font-bold text-white bg-green-700 px-4 py-1 rounded-full">Hệ thống Hasaki</p>
+                    <p className="text-lg font-bold text-white bg-green-700 px-4 py-1 rounded-full">Hệ thống {setting.websiteName}</p>
                   </div>
                 </div>
               </div>
@@ -168,7 +181,7 @@ function FooterClient({ setting }) {
 
               {/* About Hasaki */}
               <div>
-                <h3 className="font-bold text-sm mb-4 uppercase">Về Hasaki.vn</h3>
+                <h3 className="font-bold text-sm mb-4 uppercase">Về {setting.websiteName}.vn</h3>
                 <ul className="space-y-2 text-sm">
                   <li>
                     <a href="/about-us" className="hover:text-yellow-400">
@@ -187,7 +200,7 @@ function FooterClient({ setting }) {
                   </li>
                   <li>
                     <a href="/" className="hover:text-yellow-400">
-                      Hasaki cẩm nang
+                      Cẩm nang
                     </a>
                   </li>
                   <li>
@@ -204,7 +217,7 @@ function FooterClient({ setting }) {
                 <ul className="space-y-2 text-sm mb-4">
                   <li>
                     <a href="/" className="hover:text-yellow-400">
-                      Hasaki Clinic
+                      {setting.websiteName}
                     </a>
                   </li>
                   <li>
@@ -245,12 +258,34 @@ function FooterClient({ setting }) {
               {/* Newsletter */}
               <div>
                 <h3 className="font-bold text-sm mb-4 uppercase">Cập nhật thông tin khuyến mãi</h3>
-                <div className="flex gap-2 mb-4">
-                  <Input placeholder="Email của bạn" className="flex-1" />
-                  <button className="px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white font-medium rounded transition-colors">
-                    Đăng ký
-                  </button>
-                </div>
+
+                <Form
+                  layout="vertical"
+                  form={form}
+                  onFinish={handleSubmit}
+                  requiredMark={false}
+                >
+                  <div className="flex gap-2 mb-4">
+                    <Form.Item
+                      name="email"
+                      rules={[
+                        { required: true, message: "Vui lòng nhập email!" },
+                        { type: "email", message: "Email không hợp lệ!" },
+                      ]}
+                    >
+                      <Input placeholder="Email của bạn" />
+                    </Form.Item>
+                    <Form.Item>
+                      <Button
+                        type="primary"
+                        htmlType="submit"
+                        className="px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white font-medium rounded transition-colors"
+                      >
+                        Gửi yêu cầu
+                      </Button>
+                    </Form.Item>
+                  </div>
+                </Form>
 
                 {/* QR Code and App Store */}
                 <div className="flex gap-4 items-start">
@@ -271,15 +306,15 @@ function FooterClient({ setting }) {
               </div>
             </div>
           </div>
-        </div>
+        </div >
 
         {/* Brand Logos */}
-        <div className="bg-green-700 py-6">
+        <div div className="bg-green-700 py-6" >
           <div className="max-w-7xl mx-auto px-4">
             <div className="flex justify-around items-center flex-wrap gap-8">
               <div className="text-white text-center">
-                <div className="text-2xl font-bold">HASAKI</div>
-                <div className="text-xs">BEAUTY & CLINIC</div>
+                <div className="text-2xl font-bold">{setting.websiteName}</div>
+                <div className="text-xs">Fashion & BEAUTY</div>
               </div>
               <div className="text-white text-center">
                 <div className="text-xl">🍃</div>
@@ -294,10 +329,10 @@ function FooterClient({ setting }) {
               </div>
             </div>
           </div>
-        </div>
+        </div >
 
         {/* Bottom Section */}
-        <div className="bg-gray-100 py-8">
+        <div div className="bg-gray-100 py-8" >
           <div className="max-w-7xl mx-auto px-4">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               {/* Top Searches */}
@@ -305,25 +340,20 @@ function FooterClient({ setting }) {
                 <h3 className="font-bold text-sm mb-4 uppercase">Top tìm kiếm</h3>
                 <div className="flex flex-wrap gap-2">
                   {[
-                    "sữa tắm",
-                    "sữa tắm lifebuoy",
-                    "sữa tắm enchanteur",
-                    "sữa tắm hazeline",
-                    "sữa tắm cetaphil",
-                    "sữa tắm dove",
-                    "sữa tắm purite",
-                    "sữa tắm weilaiya",
-                    "sữa tắm lifebuoy khử mùi",
-                    "sữa tắm lux",
-                    "sữa tắm tesori",
-                    "sữa tắm double rich",
-                    "sữa tắm trị mụn lưng",
-                    "sữa tắm hoa hồng",
-                    "sữa tắm eucerin",
+                    "áo sơ mi",
+                    "áo cardigan",
+                    "bomber",
+                    "jogger",
+                    "quần short",
+                    "hoodie",
+                    "áo polo",
+                    "legging",
+                    "jeans",
+                    "áo giữ nhiệt",
                   ].map((keyword, index) => (
                     <a
                       key={index}
-                      href="/"
+                      href={`/search?keyword=${keyword || ""}`}
                       className="px-3 py-1 bg-white border border-gray-300 rounded text-xs hover:border-green-700 hover:text-green-700"
                     >
                       {keyword}
@@ -356,18 +386,18 @@ function FooterClient({ setting }) {
                 </div>
 
                 <div className="mt-4 text-xs text-gray-600">
-                  <p className="font-bold mb-2">Bản quyền © 2016 Hasaki.vn</p>
-                  <p className="mb-2">Công Ty Cổ phần HASAKI BEAUTY & CLINIC</p>
+                  <p className="font-bold mb-2">Bản quyền © 2016 {setting.websiteName}.vn</p>
+                  <p className="mb-2">Công Ty Cổ phần {setting.websiteName} Fashion & BEAUTY</p>
                   <p className="mb-2">
                     Giấy chứng nhận Đăng ký Kinh doanh số 0313612829 do Sở Kế hoạch và Đầu tư Thành phố Hồ Chí Minh cấp
                     ngày 13/01/2016
                   </p>
-                  <p>Trụ sở: 71 Hoàng Hoa Thám, Phường Tân Bình, Thành phố Hồ Chí Minh</p>
+                  <p>Trụ sở: {setting.address}</p>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        </div >
         <Divider />
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "16px" }}>
           <Text type="secondary">{setting.copyright}</Text>
@@ -406,7 +436,7 @@ function FooterClient({ setting }) {
             />
           </Space>
         </div>
-      </footer>
+      </footer >
     </>
   )
 }

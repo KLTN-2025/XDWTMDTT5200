@@ -206,7 +206,8 @@ const VoucherEdit = (props) => {
                 </Col>
 
                 <Col span={8}>
-                  <Form.Item label="Giá trị đơn hàng tối thiểu được nhận" name="max_order_value"
+                  <Form.Item label="Số tiền tối đa được giảm" 
+                  name="max_order_value"
                     rules={[{
                       required: true,
                       message: 'Vui lòng nhập số tiền tối đa được giảm!'

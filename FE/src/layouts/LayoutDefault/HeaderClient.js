@@ -15,6 +15,7 @@ import {
   PhoneOutlined,
   HeartOutlined,
   LogoutOutlined,
+  TruckFilled,
 } from "@ant-design/icons"
 import { searchOrder } from "../../services/client/searchServices";
 
@@ -35,6 +36,8 @@ function HeaderClient({ setting }) {
   const dispatch = useDispatch();
   const lengthCart = useSelector((state) => state.cartReducer.lengthCart);
 
+  const [orderCode, setOrderCode] = useState("")
+  const [email, setEmail] = useState("")
 
   // Get user data from cookies
   const fullName = getCookie("fullName")
@@ -101,21 +104,14 @@ function HeaderClient({ setting }) {
       href: "campaign"
     },
     {
-      title: "THƯƠNG HIỆU",
-      href: "campaign"
-    },
-    {
       title: "HÀNG MỚI VỀ",
-      href: "danh-muc?danhmuc=ao"
+      href: "danh-muc?danhmuc=ao&active=moi-nhat"
     },
     {
       title: "BÁN CHẠY",
-      href: "danh-muc?danhmuc=ao&sort=bestseller-desc"
+      href: "danh-muc?danhmuc=ao&active=ban-chay"
     }
   ]
-
-  const [orderCode, setOrderCode] = useState("")
-  const [email, setEmail] = useState("")
 
   const handleTrackOrder = async () => {
     const response = await searchOrder(orderCode, email);
@@ -131,9 +127,14 @@ function HeaderClient({ setting }) {
       {/* Top Pink Banner */}
       <div className="bg-[#ffa2b6] text-white py-2 px-4">
         <div className="max-w-7xl mx-auto flex items-center justify-center gap-4 text-sm md:text-base">
-          <span className="font-bold tracking-wider">{setting.websiteName}</span>
           <div className="bg-white text-[#ffa2b6] px-4 py-1 rounded font-bold">
-            GIÁ TỐT NHẤT TẠI WEBSITE {setting.websiteName}.vn
+            <div className="flex items-center gap-2 text-sm">
+              <TruckFilled className="w-5 h-5 text-blue-600" />
+              <span>
+                Miễn phí vận chuyển đơn{" "}
+                <span className="font-semibold text-blue-600">trên {Number(setting.shippingFee)/1000}k</span>
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -145,7 +146,9 @@ function HeaderClient({ setting }) {
             {/* Logo */}
             <div className="flex items-center gap-2 flex-shrink-0">
               <div className="bg-white rounded-full p-2 w-12 h-12 flex items-center justify-center">
-                <a href="/" className="text-[#2D7A5E] font-bold text-xl">H</a>
+                <a href="/" className="text-[#2D7A5E] font-bold text-xl">
+                  <img src={setting.logo} alt="Logo" />
+                </a>
               </div>
               <div className="flex flex-col">
                 <a href="/" className="text-[#fff] font-bold text-lg">{setting.websiteName}</a>

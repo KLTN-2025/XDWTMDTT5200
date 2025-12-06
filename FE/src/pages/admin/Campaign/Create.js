@@ -178,13 +178,13 @@ function CampaignCreate() {
 
               <Col span={24}>
                 <Form.Item label="Ảnh nhỏ" name="thumbnail">
-                  <UploadFile onImageUrlsChange={setImagesUrl} />
+                  <UploadFile onImageUrlsChange={setThumbnail} />
                 </Form.Item>
               </Col>
 
               <Col span={24}>
                 <Form.Item label="Ảnh chi tiết" name="images">
-                  <UploadFiles onImageUrlsChange={setThumbnail} />
+                  <UploadFiles onImageUrlsChange={setImagesUrl} />
                 </Form.Item>
               </Col>
 

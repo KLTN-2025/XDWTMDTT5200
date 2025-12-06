@@ -17,7 +17,7 @@ import {
   sendEmailOTP,
   verifyEmailOTP,
 } from "../../../services/client/checkoutServies";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { updateCartLength } from "../../../actions/cart";
 import {
@@ -38,6 +38,9 @@ const { Option } = Select;
 function InfoCheckout() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const mode = searchParams.get("mode");
 
   const tokenUser = getCookie("tokenUser");
   const email = getCookie("email");
@@ -119,13 +122,44 @@ function InfoCheckout() {
 
     const fetchApi = async () => {
       try {
-        if (tokenUser) {
-          const response = await findCartByUserId(tokenUser);
+        if (mode === "buynow") {
+          const products = JSON.parse(localStorage.getItem("checkout-now") || "[]");
 
-          if (response.code === 200) {
-            setCart(response.data.products);
+          setCart(products);
+          setTotalAmount(
+            products.reduce(
+              (sum, item) =>
+                sum +
+                ((Number(item.price) *
+                  (100 - Number(item.discountPercentage))) /
+                  100) *
+                item.quantity,
+              0
+            )
+          );
+        } else {
+          if (tokenUser) {
+            const response = await findCartByUserId(tokenUser);
+
+            if (response.code === 200) {
+              setCart(response.data.products);
+              setTotalAmount(
+                response.data.products.reduce(
+                  (sum, item) =>
+                    sum +
+                    ((Number(item.price) *
+                      (100 - Number(item.discountPercentage))) /
+                      100) *
+                    item.quantity,
+                  0
+                )
+              );
+            }
+          } else {
+            // non login
+            setCart(getCart());
             setTotalAmount(
-              response.data.products.reduce(
+              getCart().reduce(
                 (sum, item) =>
                   sum +
                   ((Number(item.price) *
@@ -136,21 +170,8 @@ function InfoCheckout() {
               )
             );
           }
-        } else {
-          // non login
-          setCart(getCart());
-          setTotalAmount(
-            getCart().reduce(
-              (sum, item) =>
-                sum +
-                ((Number(item.price) *
-                  (100 - Number(item.discountPercentage))) /
-                  100) *
-                item.quantity,
-              0
-            )
-          );
         }
+
       } catch (error) {
         console.log(error.message);
         message.error(error.message);
@@ -285,7 +306,7 @@ function InfoCheckout() {
         { userInfo: userInfo, productItems: cart },
         tokenUser ? tokenUser : ""
       );
-      console.log(resOrderPost);
+      console.log(cart);
       
       if (resOrderPost.code === 200) {
         dispatch(updateCartLength(0));

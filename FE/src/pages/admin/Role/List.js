@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 import { listRoleGet } from "../../../services/admin/rolesServies";
 import { getCookie } from "../../../helpers/cookie";
-import { Button, Card, message, Table } from 'antd';
-import { Link } from "react-router-dom";
-import { EyeOutlined } from '@ant-design/icons';
+import { Card, message, Table } from 'antd';
 import DeleteItem from '../../../components/DeleteItem';
 import RoleEdit from "./Edit";
 import NoRole from "../../../components/NoRole";
@@ -55,9 +53,6 @@ const RoleList = () => {
         return (
           <>
             <div>
-              <Link to={`/detail-job/${record._id}`} key={`view-${record._id}`}>
-                <Button icon={<EyeOutlined />} style={{ marginRight: 8 }} />
-              </Link>
               {permissions.includes("roles_edit") && (
                 <RoleEdit record={record} key={`edit-${record._id}`} onReload={handleReload} />
               )}

@@ -5,7 +5,6 @@ import { getCookie } from "../../../helpers/cookie";
 import NoRole from "../../../components/NoRole";
 import { shippingSettingsGet, shippingSettingsPatch } from "../../../services/admin/orderServies";
 
-
 function ShippingSettings() {
   const permissions = JSON.parse(localStorage.getItem('permissions'));
 
@@ -25,7 +24,7 @@ function ShippingSettings() {
       }
     };
     fetchData();
-  }, []);
+  }, [token]);
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -44,7 +43,12 @@ function ShippingSettings() {
         message.success("Cập nhật thành công");
         setIsModalOpen(false);
       } else {
-        message.error("Cập nhật thất bại");
+        if (Array.isArray(response.message)) {
+          const allErrors = response.message.map((err) => err.message).join("\n");
+          message.error(allErrors);
+        } else {
+          message.error(response.message || "Có lỗi xảy ra, vui lòng thử lại!");
+        }
       }
     } catch (error) {
       message.error("Cập nhật thất bại");
@@ -56,7 +60,7 @@ function ShippingSettings() {
       {permissions.includes("orders_view") ?
         <>
           <Button icon={<EditOutlined />} type="primary" ghost onClick={showModal} >Phí vận chuyển
-          
+
           </Button>
           <Modal
             title="Cài đặt phí vận chuyển"
@@ -70,12 +74,12 @@ function ShippingSettings() {
               <Row gutter={[16, 16]}>
                 <Col span={24}>
                   <Form.Item label="Phí vận chuyển" name="defaultFee">
-                    <Input type="number" />
+                    <Input type="number" min={1} />
                   </Form.Item>
                 </Col>
                 <Col span={24}>
                   <Form.Item label="Ngưỡng miễn phí" name="freeThreshold">
-                    <Input type="number" />
+                    <Input type="number" min={1} />
                   </Form.Item>
                 </Col>
                 <Col span={24}>

@@ -1,8 +1,16 @@
 import { getAuth, patchAuth } from "../../utils/request";
 const admin = "/admin";
 
-export const listOrderGet = async (token, day, month, keyword) => {
-  const result = await getAuth(`${admin}/orders?day=${day}&month=${month}&keyword=${keyword}`, token);
+export const listOrderGet = async (token, page, limit, day, month, keyword) => {
+  const params = new URLSearchParams();
+
+  if (page) params.append("page", page);
+  if (limit) params.append("limit", limit);
+  if (keyword) params.append("keyword", keyword);
+  if (day) params.append("day", day);
+  if (keyword) params.append("month", month);
+
+  const result = await getAuth(`${admin}/orders?${params.toString()}`, token);
   return result;
 }
 

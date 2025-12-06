@@ -1,4 +1,4 @@
-import { delAuth, getAuth} from "../../utils/request";
+import { delAuth, getAuth, postAuth} from "../../utils/request";
 const admin = "/admin";
 
 export const listUserGet = async (token) => {
@@ -18,5 +18,10 @@ export const changeStatusUserGet = async (token, status, id) => {
 
 export const ordersByUserGet = async (token, id) => {
   const result = await getAuth(`${admin}/users/orders-by-user/${id}`, token);
+  return result;
+}
+
+export const sendNotifications = async (token, options) => {
+  const result = await postAuth(`${admin}/users/send-notifications`, options, token);
   return result;
 }

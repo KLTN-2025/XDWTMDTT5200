@@ -10,12 +10,13 @@ const { Title } = Typography;
 function Categories() {
   const [searchParams, setSearchParams] = useSearchParams();
   const slugParam = searchParams.get("danhmuc");
+  const activeParam = searchParams.get("active");
 
   const [sortKey, setSortKey] = useState("");
   const [sortType, setSortType] = useState("asc");
   const [priceRange, setPriceRange] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
-  const [activeTab, setActiveTab] = useState("moi-nhat");
+  const [activeTab, setActiveTab] = useState(activeParam || "moi-nhat");
 
   const [priceMin, setPriceMin] = useState("");
   const [priceMax, setPriceMax] = useState("");
@@ -64,7 +65,7 @@ function Categories() {
     if (categoryCurrent) {
       setSelectedCategory(categoryCurrent._id.toString());
     }
-  }, [categoriesQuery.data]);
+  }, [categoriesQuery.data, searchParams, slugParam]);
 
 
   useEffect(() => {
@@ -93,6 +94,9 @@ function Categories() {
         setSortKey("");
         setSortType("asc");
     }
+    handleTabChange(activeTab);
+    updateURLParams({ active: activeTab });
+    window.scrollTo(0, 0);
   }, [activeTab]);
 
   const updateURLParams = (newParams) => {
@@ -117,17 +121,20 @@ function Categories() {
       updateURLParams({ danhmuc: category.slug });
       setSelectedCategory(id);
     }
+    window.scrollTo(0, 0);
   };
 
   const handleBrandChange = (e) => {
     const id = e.currentTarget.dataset.brandId;
     setSelectedBrands(id);
     updateURLParams({ brand: id });
+    window.scrollTo(0, 0);
   };
 
   const handleGenderChange = (e) => {
     setSelectedGender(e.target.value);
     updateURLParams({ sex: e.target.value });
+    window.scrollTo(0, 0);
   };
 
   const clearAllFilters = () => {
@@ -138,6 +145,7 @@ function Categories() {
     setSelectedGender(null);
 
     setSearchParams({ danhmuc: slugParam });
+    window.scrollTo(0, 0);
   };
 
   const handleTabChange = (key) => {
@@ -153,6 +161,7 @@ function Categories() {
     }
 
     updateURLParams({ sort: sortValue });
+    window.scrollTo(0, 0);
   };
 
 

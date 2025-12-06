@@ -5,6 +5,7 @@ import DeleteItem from "../../../components/DeleteItem";
 import { changeStatusUserGet, listUserGet } from "../../../services/admin/userServies";
 import NoRole from "../../../components/NoRole";
 import UserDetail from "./Detail";
+import SendNotification from "./SendNotification";
 
 
 function UserList() {
@@ -128,6 +129,7 @@ function UserList() {
     <>
       {permissions.includes("users_view") ?
         <Card title="Danh sách tài khoản khách hàng" style={{ height: "100vh" }}>
+          <SendNotification records={users} />
           <Card
             style={{
               marginTop: 10,

@@ -97,7 +97,7 @@ function BannerDetail() {
       const interval = setInterval(calculateTimeRemaining, 60000) // Cập nhật mỗi phút
       return () => clearInterval(interval)
     }
-  }, [banner])
+  }, [banner, calculateTimeRemaining])
 
   // Copy voucher code
   const copyVoucherCode = (code) => {
@@ -375,7 +375,7 @@ function BannerDetail() {
                   style={{
                     fontSize: 16,
                     lineHeight: 1.8,
-                    color: "#333",
+                    color: "#333"
                   }}
                 >
                   {parse(banner.content || "<p>Không có nội dung</p>")}

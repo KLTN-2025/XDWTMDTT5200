@@ -111,7 +111,7 @@ export default function ProductTrash() {
   return (
     <>
       {permissions.includes("trashs_view") ?
-        <Card title="Khôi phục sản phẩm">
+        <Card title="Sản phẩm">
           <Form onFinish={onFinish} layout="vertical">
             <Row gutter={[12, 12]}>
               <Col span={22}>

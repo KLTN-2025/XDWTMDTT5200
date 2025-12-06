@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import ListProduct from "../../../components/ListProduct";
 import {
   Layout,
-  Typography,
   Spin,
 } from "antd";
 import Article from "../articles/List";
@@ -13,10 +12,10 @@ import CategorySlider from "../../../components/CategorySlider";
 import { productViewed } from "../../../services/client/productServies";
 import { getViewedProducts } from "../../../helpers/viewedProducts";
 import BrandSlider from "../../../components/BrandSlider";
+import VoucherSection from "../VoucherSection";
+import SectionBanner from "../../../components/SectionBanner";
 
 const { Content } = Layout;
-const { Title, Paragraph } = Typography;
-
 
 function Home() {
   const [productVieweds, setProductVieweds] = useState([]);
@@ -59,7 +58,6 @@ function Home() {
       </div>
     );
   }
-
   return (
     <>
       <Layout className="min-h-screen">
@@ -67,48 +65,38 @@ function Home() {
 
           <TopBanner />
 
-          {/* Categories */}
-          <div style={{ textAlign: "center" }}>
-            <Title level={2} style={{ marginBottom: "8px" }}>
-              Mua sắm theo danh mục
-            </Title>
-            <Paragraph
-              style={{
-                maxWidth: "700px",
-                margin: "0 auto",
-                color: "rgba(0, 0, 0, 0.65)",
-              }}
-            >
-              Duyệt qua nhiều loại sản phẩm của chúng tôi trong các danh mục phổ
-              biến s
-            </Paragraph>
-          </div>
+          {/* Vouchers */}
+          <VoucherSection vouchers={homeQuery.data.vouchers} />
 
-          <CategorySlider categories={categoriesQuery.data || []} />
+          {/* Categories */}
+          <SectionBanner title={"Mua sắm theo danh mục"} />
           
+          <CategorySlider categories={categoriesQuery.data || []} />
+
+          <SectionBanner title={"Thương hiệu"} />
           <BrandSlider brands={homeQuery.data.brands} />
 
           {/* Best Selling Products */}
+          <SectionBanner title={"Bán chạy"} />
           <ProductSlider
             products={homeQuery.data.bestSellingProducts || []}
-            title={"Bán chạy"}
           />
 
           {/* Featured Products */}
-          <div>
-            <ListProduct
-              products={homeQuery.data.featuredProducts}
-              title={`Sản phẩm nỗi bật`}
-            />
-          </div>
+          <SectionBanner title={"Sản phẩm nỗi bật"} />
+          <ListProduct
+            products={homeQuery.data.featuredProducts}
+          />
+
 
           {/* Best Selling Products */}
           <ProductSlider products={productVieweds || []} title={"Đã xem"} />
 
           {/* Bài viết */}
+          <SectionBanner title={"XU HƯỚNG VÀ TIN TỨC THỜI TRANG"} />
           <Article />
 
-          
+
         </Content>
       </Layout>
     </>

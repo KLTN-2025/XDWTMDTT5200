@@ -6,7 +6,7 @@ function Account() {
   return (
     <div className="max-w-4xl mx-auto">
       <Typography>
-        <Title level={3}>Đăng ký thành viên Hasaki như thế nào?</Title>
+        <Title level={3}>Đăng ký thành viên của chúng tôi như thế nào?</Title>
         <Paragraph>
           Quý khách vui lòng nhấn vào nút <strong>“Đăng nhập/Đăng ký tài khoản”</strong>
           trên góc phải màn hình sau đó chọn <strong>“Đăng ký/Đăng ký ngay”</strong> (Đối với Desktop)
@@ -45,12 +45,12 @@ function Account() {
         </Paragraph>
 
         <Title level={4}>
-          Đăng ký thành viên tại Hasaki.vn sẽ giúp ích gì cho tôi? Hasaki có chương trình ưu đãi nào hấp dẫn dành cho khách hàng thân thiết?
+          Đăng ký thành viên tại cửa hàng của chúng tôi sẽ giúp ích gì cho bạn? Cửa hàng chúng tôi sẽ có chương trình ưu đãi nào hấp dẫn dành cho khách hàng thân thiết?
         </Title>
         <Paragraph>
           Đổi điểm lấy quà theo danh sách quà tặng có sẵn với các mức điểm tương ứng,
           quà sẽ được tặng kèm đơn hàng tiếp theo.
-          <a href="/" className="text-blue-500 hover:underline"> Xem thêm hướng dẫn tại đây</a>.
+          <a href="#" className="text-blue-500 hover:underline"> Xem thêm hướng dẫn tại đây</a>.
         </Paragraph>
       </Typography>
     </div>

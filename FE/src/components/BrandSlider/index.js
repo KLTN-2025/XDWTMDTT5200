@@ -26,11 +26,6 @@ const BrandSlider = ({ brands }) => {
 
   return (
     <div className="bg-white rounded-xl shadow-sm p-4 mb-8">
-      {/* Header */}
-      <div className="flex justify-between items-center mb-3">
-        <h2 className="text-2xl font-bold mb-6 text-[#2D7A5E]">Thương hiệu</h2>
-      </div>
-
       <div className="grid grid-cols-12 gap-4">
         {/* Bên trái: ảnh thương hiệu nổi bật */}
         <div

@@ -111,7 +111,7 @@ export default function BannerTrash() {
   return (
     <>
       {permissions.includes("trashs_view") ?
-        <Card title="Khôi phục quảng cáo" >
+        <Card title="Quảng cáo" >
           <Form onFinish={onFinish} layout="vertical">
             <Row gutter={[12, 12]}>
               <Col span={22}>

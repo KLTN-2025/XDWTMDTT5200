@@ -104,7 +104,7 @@ export default function UserRestore() {
   return (
     <>
       {permissions.includes("trashs_view") ?
-        <Card title="Khôi phục sản phẩm">
+        <Card title="Khách hàng">
           <Form onFinish={onFinish} layout="vertical">
             <Row gutter={[12, 12]}>
               <Col span={22}>

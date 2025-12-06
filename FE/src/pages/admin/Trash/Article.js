@@ -111,7 +111,7 @@ export default function ArticleTrash() {
   return (
     <>
       {permissions.includes("trashs_view") ?
-        <Card title="Khôi phục bài viết" >
+        <Card title="Bài viết" >
           <Form onFinish={onFinish} layout="vertical">
             <Row gutter={[12, 12]}>
               <Col span={22}>

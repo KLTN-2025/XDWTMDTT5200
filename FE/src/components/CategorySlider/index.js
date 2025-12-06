@@ -4,8 +4,7 @@ import CategoryCard from "../Category-card";
 
 export default function CategorySlider({ categories }) {
   const scrollContainerRef = useRef(null);
-  console.log(categories);
-  
+
   const scroll = (direction) => {
     if (scrollContainerRef.current) {
       const scrollAmount = 500;

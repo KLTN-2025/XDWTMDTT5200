@@ -8,29 +8,6 @@ import { listAllCategory } from "../../../services/admin/categoryServies";
 import UploadFile from "../../../components/UploadFile";
 import useArticles from "../../../hooks/admin/useArticles";
 
-const optionsTags = [
-  { value: 'ao-so-mi', desc: 'Áo sơ mi' },
-  { value: 'vay-dam', desc: 'Váy đầm' },
-  { value: 'quan-jean', desc: 'Quần jean' },
-  { value: 'ao-khoac', desc: 'Áo khoác' },
-  { value: 'thoi-trang-nu', desc: 'Thời trang nữ' },
-  { value: 'thoi-trang-nam', desc: 'Thời trang nam' },
-  { value: 'basic-style', desc: 'Basic style' },
-  { value: 'y2k', desc: 'Y2K' },
-  { value: 'thoi-trang-cong-so', desc: 'Thời trang công sở' },
-  { value: 'outfit-di-choi', desc: 'Outfit đi chơi' },
-  { value: 'outfit-di-lam', desc: 'Outfit đi làm' },
-  { value: 'mix-match', desc: 'Mix & Match' },
-  { value: 'lookbook', desc: 'Lookbook' },
-  { value: 'xuan-he', desc: 'Xuân - Hè' },
-  { value: 'thu-dong', desc: 'Thu - Đông' },
-  { value: 'vintage', desc: 'Vintage' },
-  { value: 'nang-dong', desc: 'Năng động' },
-  { value: 'sang-trong', desc: 'Sang trọng' },
-  { value: 'hoa-tiet-hoa', desc: 'Họa tiết hoa' },
-  { value: 'chat-lieu-cotton', desc: 'Chất liệu cotton' },
-];
-
 function ArticleEdit(props) {
   const { record } = props;
   const token = getCookie("token");
@@ -126,10 +103,12 @@ function ArticleEdit(props) {
               </Form.Item>
             </Col>
             <Col span={5}>
-              <Form.Item label="Danh mục" name="category" rules={[{ required: true, message: "Chọn danh mục" }]}>
+              <Form.Item label="Danh mục" name="categories" rules={[{ required: true, message: "Chọn danh mục" }]}>
                 <Select
-                  options={optionsCategories}     // Cung cấp danh sách options
-                  placeholder="Chọn danh mục"
+                  mode="multiple"
+                  style={{ width: '100%' }}
+                  placeholder="select multiple tags"
+                  options={optionsCategories}
                 />
               </Form.Item>
             </Col>
@@ -139,16 +118,6 @@ function ArticleEdit(props) {
                   allowClear
                   type="number"
                   placeholder="Tự tăng"
-                />
-              </Form.Item>
-            </Col>
-            <Col span={14}>
-              <Form.Item label="Tags" name="tags" rules={[{ required: true, message: "Chọn tags" }]}>
-                <Select
-                  mode="multiple"
-                  style={{ width: '100%' }}
-                  placeholder="select multiple tags"
-                  options={optionsTags.map(opt => ({ value: opt.value, label: opt.desc }))}
                 />
               </Form.Item>
             </Col>
@@ -176,7 +145,7 @@ function ArticleEdit(props) {
               </Form.Item>
             </Col>
             <Col span={24}>
-              <Form.Item label="Mô tả" name="description" rules={[{ required: true, message: "Nhập nội dung" }]}>
+              <Form.Item label="Nội dung" name="description" rules={[{ required: true, message: "Nhập nội dung" }]}>
                 <MyEditor />
               </Form.Item>
             </Col>

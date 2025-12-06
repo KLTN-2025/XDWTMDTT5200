@@ -34,7 +34,7 @@ export const del = async (path, options) => {
   return result;
 }
 
-export const post = async (path, options, token) => {
+export const post = async (path, options) => {
   const response = await fetch(API_DOMAIN + path, {
     method: "POST",
     headers: {

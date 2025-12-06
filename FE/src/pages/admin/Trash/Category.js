@@ -111,7 +111,7 @@ export default function CategoryTrash() {
   return (
     <>
       {permissions.includes("trashs_view") ?
-        <Card title="Khôi phục danh mục" >
+        <Card title="Danh mục" >
           <Form onFinish={onFinish} layout="vertical">
             <Row gutter={[12, 12]}>
               <Col span={22}>

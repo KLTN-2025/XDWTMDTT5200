@@ -21,20 +21,19 @@ const ArticleDetail = () => {
   useEffect(() => {
     const fetchArticle = async () => {
       const response = await detailArticle(slug);
+      
       if (response.code === 200) {
         setArticle(response.data);
       }
 
       const responseArticles = await listArticles();
       if (responseArticles.code === 200) {
-        setRecentArticles(responseArticles.articles);
+        setRecentArticles(responseArticles.data);
       }
-
     }
-
     fetchArticle();
   }, [slug])
-
+  
   return (
     <div className="blog-detail-container">
       <Row gutter={[32, 32]}>
@@ -75,9 +74,8 @@ const ArticleDetail = () => {
         {/* Sidebar */}
         <Col xs={24} lg={8}>
           <div className="blog-sidebar">
-
             {/* Recent Posts */}
-            <h3>Recent Articles</h3>
+            <h3>Bài viết khác</h3>
             <List
               dataSource={recentArticles?.slice(0, 5) || []}
               renderItem={(item) => (
@@ -98,6 +96,20 @@ const ArticleDetail = () => {
                 </List.Item>
               )}
             />
+          </div>
+          <div className="lg:col-span-2">
+            <h3 className="font-bold text-sm mb-4 uppercase">Tags</h3>
+            <div className="flex flex-wrap gap-2">
+              {article.categories.map((item, index) => (
+                <a
+                  key={index}
+                  href={`/danh-muc?danhmuc=${item.slug}`}
+                  className="px-3 py-1 bg-white border border-gray-300 rounded text-xs hover:border-green-700 hover:text-green-700"
+                >
+                  {item.title}
+                </a>
+              ))}
+            </div>
           </div>
         </Col>
       </Row>

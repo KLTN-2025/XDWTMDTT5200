@@ -1,22 +1,14 @@
-import { Card, Select, Table, Tag, message } from 'antd';
+import { Card, Select, Table, message } from 'antd';
 import { useEffect, useState } from 'react';
 import { getCookie } from "../../../helpers/cookie";
 import NoRole from '../../../components/NoRole';
-import { changeStatusVoucher } from '../../../services/admin/voucherServies';
 import { changeStatusContact, listContacts } from '../../../services/admin/contactServies';
 import ContactDetail from './Detail';
 import dayjs from 'dayjs';
 import ContactReply from './Reply';
 import confirm from 'antd/es/modal/confirm';
 import { ExclamationCircleFilled } from '@ant-design/icons';
-
-const statusColors = {
-  pending: "orange",
-  processing: "blue",
-  resolved: "green",
-  closed: "gray",
-  spam: "red",
-};
+import SendNotification from './SendNotification';
 
 const ContactList = () => {
   const permissions = JSON.parse(localStorage.getItem('permissions'));
@@ -161,7 +153,6 @@ const ContactList = () => {
               <span>Spam</span>
             </Select.Option>
           </Select>
-
         );
       }
     },
@@ -173,12 +164,12 @@ const ContactList = () => {
         return (
           <>
             <div>
-              {permissions.includes("vouchers_edit") && (
+              {permissions.includes("users_view") && (
                 <ContactDetail
-                record={record} key={`detail-${record._id}`}
-                onReload={handleReload} />
+                  record={record} key={`detail-${record._id}`}
+                  onReload={handleReload} />
               )}
-              {permissions.includes("vouchers_del") && (
+              {permissions.includes("users_view") && (
                 <ContactReply record={record} key={`reply-${record._id}`} />
               )}
             </div>
@@ -190,8 +181,8 @@ const ContactList = () => {
 
   return (
     <>
-      {permissions.includes("vouchers_view") ?
-        <Card title="Danh sách voucher">
+      {permissions.includes("users_view") ?
+        <Card title="Danh sách liên hệ">
           <Card
             style={{
               marginTop: 10,
@@ -199,6 +190,7 @@ const ContactList = () => {
             }}
             type="inner"
           >
+            <SendNotification records={data} />
             <Table
               dataSource={data}
               columns={columns}

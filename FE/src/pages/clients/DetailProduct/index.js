@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   Row,
   Col,
@@ -14,14 +14,15 @@ import {
   Divider,
   Badge,
   Rate,
+  message,
 } from "antd";
 import {
+  HeartFilled,
+  HeartOutlined,
   LeftOutlined,
   RightOutlined,
   ShoppingCartOutlined,
-  StarFilled,
-  TagOutlined,
-  TruckFilled,
+  TagOutlined
 } from "@ant-design/icons";
 import parse from "html-react-parser";
 import ReviewProduct from "../ReviewProduct";
@@ -30,6 +31,9 @@ import { useCart } from "../../../hooks/client/useCart";
 import useProducts from "../../../hooks/client/useProducts";
 import useVouchers from "../../../hooks/client/useVouchers";
 import { addViewed } from "../../../helpers/viewedProducts";
+import { productFavorite } from "../../../services/client/productServies";
+import { getCookie } from "../../../helpers/cookie";
+import { addFavorite, removeFavorite } from "../../../helpers/favorites";
 
 const { Title, Text } = Typography;
 
@@ -43,6 +47,9 @@ const tabs = [
 function DetailProduct() {
   const params = useParams();
   const { add } = useCart();
+
+  const navigate = useNavigate();
+
   const [product, setProduct] = useState({});
   const [quantity, setQuantity] = useState(1);
   const { productQuery } = useProducts({ slugProduct: params.slug });
@@ -59,6 +66,9 @@ function DetailProduct() {
 
   const { vouchersQuery } = useVouchers();
   const [copiedCode, setCopiedCode] = useState(null);
+
+  const [isHovered, setIsHovered] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
 
   // Handle windo w resize
   useEffect(() => {
@@ -126,6 +136,51 @@ function DetailProduct() {
       .catch(() => {
         alert("Không thể sao chép mã!");
       });
+  };
+
+  async function handleBuyNow() {
+    if (!selectedSize) {
+      message.error("Vui lòng chọn kích cỡ!")
+      return
+    }
+    const productAdd = {
+      product_id: product._id,
+      title: product.title,
+      price: product.price,
+      discountPercentage: product.discountPercentage,
+      size: selectedSize,
+      quantity: quantity,
+      thumbnail: product.thumbnail,
+      slug: product.slug,
+    };
+
+    localStorage.setItem("checkout-now", JSON.stringify([productAdd]));
+    navigate("/order/info-checkout?mode=buynow");
+  }
+
+  const handleToggleFavorite = async () => {
+    const tokenUser = getCookie("tokenUser");
+    try {
+      if (tokenUser) {
+        const typeFavorite = isFavorite ? "unfavorite" : "favorite";
+        const res = await productFavorite(typeFavorite, productId, tokenUser);
+        if (res.code === 200) {
+          setIsFavorite(!isFavorite);
+          addFavorite(product._id);
+          message.success(res.message);
+        } else if (res.code === 201) {
+          setIsFavorite(!isFavorite);
+          removeFavorite(product._id);
+          message.success(res.message);
+        } else {
+          message.error(res.message);
+        }
+      } else {
+        message.error("Vui lòng đăng nhập để thêm sản phẩm yêu thích");
+      }
+    } catch (err) {
+      message.error(err);
+    }
   };
 
   return (
@@ -266,6 +321,25 @@ function DetailProduct() {
               {product.title}
             </Title>
 
+            {/* Favorite Button */}
+            <div >
+              <Button
+                type="text"
+                shape="circle"
+                size="large"
+                icon={
+                  isFavorite ? (
+                    <HeartFilled className="text-xl text-red-500" />
+                  ) : (
+                    <HeartOutlined className="text-xl text-black/80" />
+                  )
+                }
+                onClick={handleToggleFavorite}
+                className={`bg-gray-50/95 hover:bg-gray-100 shadow-md transition-all ${isHovered ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2"
+                  }`}
+              />
+            </div>
+
             {/* Rating & Sales */}
             <div className="flex items-center gap-4 text-sm">
               <div className="flex items-center gap-1 mb-2">
@@ -353,15 +427,8 @@ function DetailProduct() {
                 }}
               >
                 {product.excerpt}
-              </div>
-            </div>
 
-            <div className="flex items-center gap-2 text-sm">
-              <TruckFilled className="w-5 h-5 text-blue-600" />
-              <span>
-                Miễn phí vận chuyển đơn{" "}
-                <span className="font-semibold text-blue-600">trên 299k</span>
-              </span>
+              </div>
             </div>
 
             {/* Size Selection */}
@@ -471,7 +538,7 @@ function DetailProduct() {
                     <Button
                       size="large"
                       icon={<ShoppingCartOutlined />}
-                      onClick={addCart}
+                      onClick={handleBuyNow}
                       style={{
                         height: 48,
                         width: isMobile ? "100%" : 200,

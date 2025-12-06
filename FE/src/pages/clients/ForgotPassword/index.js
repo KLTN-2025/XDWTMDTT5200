@@ -322,9 +322,11 @@ export default function ForgotPassword() {
 
           {/* Back to Login Link */}
           <div className="text-center pt-4">
-            <Button type="link" className="text-gray-500 hover:text-green-600">
-              Quay lại đăng nhập
-            </Button>
+            <a href="/login">
+              <Button type="link" className="text-gray-500 hover:text-green-600">
+                Quay lại đăng nhập
+              </Button>
+            </a>
           </div>
         </div>
       </Card>

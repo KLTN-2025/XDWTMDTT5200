@@ -47,7 +47,7 @@ function ContactReply(props) {
 
   return (
     <>
-      {permissions.includes("brands_edit") ?
+      {permissions.includes("users_view") ?
         <>
           <Button icon={<MessageOutlined />} type="primary"
             style={{ marginLeft: "10px" }}

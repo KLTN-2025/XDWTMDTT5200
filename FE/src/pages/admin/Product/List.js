@@ -1,4 +1,4 @@
-import { Button, Card, Input, Table, Tag, Form, Row, Col, Select, message } from "antd";
+import { Card, Input, Table, Tag, Form, Row, Col, Select, message } from "antd";
 import { useMemo, useState, useCallback } from "react";
 import { getCookie } from "../../../helpers/cookie";
 import DeleteItem from "../../../components/DeleteItem";
@@ -81,7 +81,7 @@ function ProductList() {
     [brands]
   );
 
-  // 🧠 Handlers (memoized để tránh re-render)
+  // Handlers (memoized để tránh re-render)
   const handleChangeStatus = useCallback(
     (e) => {
       const [statusChange, id] = e.target.dataset.id.split("-");
@@ -90,7 +90,7 @@ function ProductList() {
       updateStatus.mutate({ statusChange, id });
     }, [permissions, updateStatus]);
 
-    // filter
+  // filter
   const handleSearch = useCallback((values) => setKeyword(values.keyword || ""), []);
   const handleSortChange = useCallback((key) => (value) => {
     setSortKey(key);
@@ -220,7 +220,7 @@ function ProductList() {
         render: (_, record) => (
           <div>
             {permissions.includes("products_view") &&
-              <ProductReview product_id={record._id} slug={record.slug}/>
+              <ProductReview product_id={record._id} slug={record.slug} />
             }
             {permissions.includes("products_edit") &&
               <ProductEdit record={record} categories={categories} brands={brands} />
