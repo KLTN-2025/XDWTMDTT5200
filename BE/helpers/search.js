@@ -27,6 +27,7 @@ const searchHelper = (query) => {
         { title: keywordRegex },
         { code_TxnRef: keywordRegex },
         { code: keywordRegex },
+        { "userInfo.phone": keywordRegex },
       ]
     };
   }

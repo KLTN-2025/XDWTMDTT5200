@@ -12,7 +12,10 @@ const userSchema = new mongoose.Schema({
   fullName: String,
   email: String,
   password: String,
-  rank: String,
+  rank: {
+    type: String,
+    default: "Member"
+  }, // Diamond, Platinum, Gold, Silver, Member
   phone: {
     type: String,
     default: ""

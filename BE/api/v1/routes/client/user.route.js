@@ -27,7 +27,7 @@ const authMiddleware = require("../../middlewares/client/auth.middleware");
 
 router.post(
   "/register",
-  createRateLimiter(3,5),
+  createRateLimiter(3, 5),
   registerValidationRules,
   registerValid,
   controller.registerPost
@@ -35,7 +35,7 @@ router.post(
 
 router.post(
   "/login",
-  createRateLimiter(5,1),
+  createRateLimiter(5, 5),
   loginValidationRules,
   loginUserValid,
   controller.loginPost
@@ -43,14 +43,14 @@ router.post(
 
 router.post(
   "/password/forgot",
-  createRateLimiter(3,15),
+  createRateLimiter(3, 15),
   validForgot.forgotPasswordPost,
   controller.forgotPasswordPost
 );
 
 router.post(
   "/password/otp/:email",
-  createRateLimiter(3,15),
+  createRateLimiter(3, 15),
   validForgot.optPasswordPost,
   controller.optPasswordPost
 );
@@ -103,14 +103,28 @@ router.get(
 );
 
 // Callback sau khi Google xác thực
-router.get(
-  "/google/callback",
-  passport.authenticate("google", {
-    session: false,
-    failureRedirect: "/login",
-  }),
-  controller.loginGoogle
-);
+router.get("/google/callback", (req, res, next) => {
+  passport.authenticate("google", { session: false }, (err, user, info) => {
+    if (err) return next(err);
+
+    // ❌ Khi lỗi từ passport (ví dụ email đã tồn tại)
+    if (info?.message) {
+      return res.redirect(
+        `${process.env.FRONTEND_URL}/login?error=${encodeURIComponent(info.message)}`
+      );
+    }
+
+    if (!user) {
+      return res.redirect(
+        `${process.env.FRONTEND_URL}/login?error=Đăng nhập Google thất bại`
+      );
+    }
+
+    // Nếu thành công → chuyển sang controller
+    return controller.loginGoogle(req, res, user);
+  })(req, res, next);
+});
+
 
 router.patch(
   "/info/set-password",
@@ -127,13 +141,27 @@ router.get(
 );
 
 router.get(
-  "/facebook/callback",
-  passport.authenticate("facebook", {
-    session: false,
-    failureRedirect: "/login",
-  }),
-  controller.loginFacebook
-);
+  "/facebook/callback", (req, res, next) => {
+    passport.authenticate("facebook", { session: false }, (err, user, info) => {
+      if (err) return next(err);
+
+      // ❌ Khi lỗi từ passport (ví dụ email đã tồn tại)
+      if (info?.message) {
+        return res.redirect(
+          `${process.env.FRONTEND_URL}/login?error=${encodeURIComponent(info.message)}`
+        );
+      }
+
+      if (!user) {
+        return res.redirect(
+          `${process.env.FRONTEND_URL}/login?error=Đăng nhập Facebook thất bại`
+        );
+      }
+
+      // Nếu thành công → chuyển sang controller
+      return controller.loginFacebook(req, res, user);
+    })(req, res, next);
+  });
 
 router.post("/send-otp", controller.sendEmailOtpRegister);
 

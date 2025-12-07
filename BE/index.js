@@ -1,7 +1,7 @@
 const express = require("express");
 require('dotenv').config();
 const app = express();
-const port = process.env.PORT;
+const port = process.env.PORT || 5000;
 const bodyParser = require("body-parser"); // lấy dữ liệu từ body gửi lên
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
@@ -23,6 +23,6 @@ const routeClient = require("./api/v1/routes/client/index.route");
 route(app);
 routeClient(app);
 
-app.listen(port, () => {
+app.listen(port, '0.0.0.0', () => {
   console.log(`Example app listening on port ${port}`)
 });

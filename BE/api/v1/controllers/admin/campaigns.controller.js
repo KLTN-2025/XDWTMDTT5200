@@ -123,9 +123,11 @@ module.exports.createPost = async (req, res) => {
       campaign: campaign
     });
   } catch (error) {
+    console.log(error.message);
+    
     res.json({
       code: 400,
-      message: "Lỗi params"
+      message: "Lỗi " + error.message
     });
   }
 }

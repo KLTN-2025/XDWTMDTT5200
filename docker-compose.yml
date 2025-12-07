@@ -1,0 +1,25 @@
+services:
+  backend:
+    build:
+      context: ./BE
+    container_name: be-app
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env.docker  
+    environment:
+      - NODE_ENV=production
+    restart: always
+
+  frontend:
+    build:
+      context: ./FE
+    container_name: fe-app
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    restart: always
+
+
+

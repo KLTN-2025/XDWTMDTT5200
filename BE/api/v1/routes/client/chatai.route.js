@@ -4,7 +4,4 @@ const controller = require("../../controllers/client/chat-ai.controller");
 
 router.post("/", controller.index);
 
-
-
-
 module.exports = router;

@@ -25,7 +25,6 @@ module.exports = (app) => {
   app.use(`/api/v1/vn-pay`, vnPay);
   app.use(`/api/v1/momo-pay`, momoPay);
   app.use(`/api/v1/bunz`, bunz);
-
   app.use(`/api/v1/banners`, banner);
   app.use(`/api/v1/cart`, cartRoute);
   app.use(`/api/v1/products`, productRoute);

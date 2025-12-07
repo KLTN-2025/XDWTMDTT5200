@@ -325,6 +325,20 @@ module.exports.info = async (req, res) => {
 module.exports.editInfo = async (req, res) => {
   try {
     const userId = req.user.id;
+    const existEmail = req.body.email;
+
+    const existUser = await User.findOne({
+      email: existEmail,
+      _id: { $ne: userId },
+    });
+
+    if (existUser) {
+      res.json({
+        code: 400,
+        message: "Email đã tồn tại trên hệ thống!",
+      });
+      return;
+    }
 
     await User.updateOne(
       {
@@ -536,7 +550,7 @@ module.exports.ordersHistoryByUserId = async (req, res) => {
           } else {
             product.title = infoProduct.title;
           }
-          
+
           product.totalPrice = priceNew * product.quantity;
         }
 
@@ -558,9 +572,8 @@ module.exports.ordersHistoryByUserId = async (req, res) => {
 };
 
 //[GET] /google/callback
-module.exports.loginGoogle = async (req, res) => {
+module.exports.loginGoogle = async (req, res, user) => {
   try {
-    const user = req.user; // do Passport trả về
     // Tạo JWT token
     const token = jwt.sign({
       id: user._id
@@ -626,11 +639,9 @@ module.exports.setPasswordPatch = async (req, res) => {
 };
 
 //[GET] /google/facebook
-module.exports.loginFacebook = async (req, res) => {
+module.exports.loginFacebook = async (req, res, user) => {
   try {
-    const user = req.user; // do Passport trả về
-    console.log(user);
-    
+
     // Tạo JWT token
     const token = jwt.sign(
       { id: user._id },
@@ -644,7 +655,7 @@ module.exports.loginFacebook = async (req, res) => {
     res.redirect(`http://localhost:3000/login?token=${token}`);
   } catch (err) {
     console.error(err);
-    res.redirect("/login?error=google_login_failed");
+    res.redirect("/login?error=facebook_login_failed");
   }
 };
 
@@ -760,12 +771,13 @@ module.exports.sendEmailOtpAccount = async (req, res) => {
     if (userAuth.email !== email) {
       const userExsist = await User.findOne({
         email: email,
+        _id: { $ne: userId }
       });
 
       if (userExsist) {
         res.json({
           code: 400,
-          message: "Email đã tồn tại!",
+          message: "Email đã tồn tại trên hệ thống!",
         });
         return;
       }

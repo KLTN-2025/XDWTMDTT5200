@@ -1,0 +1,51 @@
+// file chứa tất cả các route khi chúng ta gọi đến thì sẽ chạy vào
+const productRoute = require("./product.route");
+const productCategoryRoute = require("./products-category.route");
+const roleRoute = require("./role.route");
+const accountRoute = require("./account.route");
+const authRoute = require("./auth.route");
+const darhBoardRoute = require("./dashboard.route");
+const myAccountRoute = require("./my-account.route");
+const settingRoute = require("./setting-general.route");
+const userRoute = require("./users.route");
+const orderRoute = require("./orders.route");
+const articleRoute = require("./articles.route");
+const bannerRoute = require("./banners.route");
+const voucherRoute = require("./vouchers.route");
+const trashRoute = require("./trashs.route");
+const brandRoute = require("./brand.route");
+const campaignRoute = require("./campaign.route");
+const transactionRoute = require("./transaction.route");
+const voucherGiftRoute = require("./voucher-gift.route");
+const contactRoute = require("./contact.route");
+
+const authMiddleware = require("../../middlewares/admin/auth.middleware");
+const connectDb = require("../../middlewares/connectMongo.middware");
+
+module.exports = (app) => {
+  const prefixAdmin = "admin";
+
+  app.use(connectDb.connectMongo);
+
+  app.use(`/api/v1/${prefixAdmin}/products`, authMiddleware.requireAuth, productRoute);
+  app.use(`/api/v1/${prefixAdmin}/products-category`, authMiddleware.requireAuth,
+    productCategoryRoute);
+  app.use(`/api/v1/${prefixAdmin}/auth`, authRoute);
+  app.use(`/api/v1/${prefixAdmin}/roles`, authMiddleware.requireAuth, roleRoute);
+  app.use(`/api/v1/${prefixAdmin}/accounts`, authMiddleware.requireAuth, accountRoute);
+  app.use(`/api/v1/${prefixAdmin}/dashboard`, authMiddleware.requireAuth, darhBoardRoute);
+  app.use(`/api/v1/${prefixAdmin}/my-account`, authMiddleware.requireAuth, myAccountRoute);
+  app.use(`/api/v1/${prefixAdmin}/settings`, authMiddleware.requireAuth, settingRoute);
+  app.use(`/api/v1/${prefixAdmin}/users`, authMiddleware.requireAuth, userRoute);
+  app.use(`/api/v1/${prefixAdmin}/orders`, authMiddleware.requireAuth, orderRoute);
+  app.use(`/api/v1/${prefixAdmin}/articles`, authMiddleware.requireAuth, articleRoute);
+  app.use(`/api/v1/${prefixAdmin}/banners`, authMiddleware.requireAuth, bannerRoute);
+  app.use(`/api/v1/${prefixAdmin}/vouchers`, authMiddleware.requireAuth, voucherRoute);
+  app.use(`/api/v1/${prefixAdmin}/trashs`, authMiddleware.requireAuth, trashRoute);
+  app.use(`/api/v1/${prefixAdmin}/brands`, authMiddleware.requireAuth, brandRoute);
+  app.use(`/api/v1/${prefixAdmin}/campaigns`, authMiddleware.requireAuth, campaignRoute);
+  app.use(`/api/v1/${prefixAdmin}/transactions`, authMiddleware.requireAuth, transactionRoute);
+  app.use(`/api/v1/${prefixAdmin}/contacts`, authMiddleware.requireAuth, contactRoute);
+  app.use(`/api/v1/${prefixAdmin}/voucher-gifts`, authMiddleware.requireAuth, voucherGiftRoute);
+
+} 

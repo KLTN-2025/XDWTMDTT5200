@@ -427,7 +427,7 @@ module.exports.getTopSellingProducts = async (req, res) => {
         }
       },
       { $sort: { totalSold: -1 } },
-      { $limit: 5 } // top 5
+      { $limit: 10 } // top 5
     ]);
 
     if (!result.length) {

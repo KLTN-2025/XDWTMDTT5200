@@ -12,7 +12,9 @@ const articleSchema = new mongoose.Schema({
   author: String,
   position: Number,
   featured: String,
-  category: String,
+  categories: [
+    { type: mongoose.Schema.Types.ObjectId, ref: "ProductCategory" }
+  ],
   slug: { type: String, slug: "title", unique: true },
   deleted: {
     type: Boolean,
@@ -36,7 +38,7 @@ const articleSchema = new mongoose.Schema({
     }
   ],
   deletedAt: Date
-  },
+},
   {
     timestamps: true,
   }

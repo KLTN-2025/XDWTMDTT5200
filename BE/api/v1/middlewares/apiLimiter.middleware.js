@@ -26,7 +26,7 @@ const createRateLimiter = (maxRequests, windowMinutes) => {
     max: maxRequests,
     message: {
       code: 429,
-      message: "Quá nhiều lần truy cập, vui lòng thử lại sau."
+      message: `Quá nhiều lần truy cập, vui lòng thử lại sau.{${windowMinutes}} phút.`,
     },
     standardHeaders: true,  // Gửi thông tin giới hạn trong header response
     legacyHeaders: false,   // Tắt header cũ
